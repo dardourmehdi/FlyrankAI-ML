@@ -1,0 +1,52 @@
+{
+  "dataset": {
+    "n_rows": 158549,
+    "n_clients": 46,
+    "base_rate": 0.47815501832241136,
+    "train_pages": 135314,
+    "test_pages": 23235,
+    "train_clients": 34,
+    "test_clients": 12,
+    "test_base_rate": 0.46989455562728644,
+    "feature_window": "2026-03-01 to 2026-03-31",
+    "outcome_window": "2026-04-01 to 2026-04-30"
+  },
+  "baseline_definition": "Rank descending by March log(1+impressions) as a simple visibility-only heuristic",
+  "model_definition": "RandomForestClassifier(150 trees, min_samples_leaf=10, max_features=sqrt, random_state=42)",
+  "evaluation": "One seeded 75/25 group-disjoint client split; global top-k precision pooled over held-out clients",
+  "baseline": {
+    "roc_auc": 0.57043,
+    "average_precision": 0.492218,
+    "precision_at_20": 0.55,
+    "precision_at_50": 0.36,
+    "precision_at_100": 0.35,
+    "precision_at_500": 0.372
+  },
+  "model": {
+    "roc_auc": 0.700054,
+    "average_precision": 0.635578,
+    "precision_at_20": 0.8,
+    "precision_at_50": 0.8,
+    "precision_at_100": 0.73,
+    "precision_at_500": 0.702
+  },
+  "per_client_evaluation": {
+    "clients_with_at_least_50_pages": 7,
+    "macro_p50_model": 0.4914285714285714,
+    "macro_p50_baseline": 0.23142857142857146
+  },
+  "feature_importance": {
+    "impressions": 0.29173,
+    "clicks": 0.06376,
+    "ctr": 0.13155,
+    "avg_position": 0.32267,
+    "active_days": 0.19029
+  },
+  "caveats": [
+    "Observational proxy label does not establish refresh lift.",
+    "April INNER JOIN excluded pages absent from April observed data, risking survivorship bias.",
+    "Single random group split and one month pair do not establish temporal or client generalization.",
+    "Global precision@50 can be dominated by large clients; macro client metrics also reported.",
+    "Simple visibility baseline is not the earlier Week 4 refresh heuristic and not the previous starter dataset baseline."
+  ]
+}

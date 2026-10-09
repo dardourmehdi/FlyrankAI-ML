@@ -34,3 +34,4 @@ __pycache__/
 .venv/
 venv/
 .env
+flyrank_march_april_model_data.csv

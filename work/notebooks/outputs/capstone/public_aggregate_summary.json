@@ -1,0 +1,40 @@
+{
+  "n_pages": 158549,
+  "n_clients": 46,
+  "n_train_pages": 135314,
+  "n_test_pages": 23235,
+  "train_clients": 34,
+  "test_clients": 12,
+  "overall_base_rate": 0.47815501832241136,
+  "test_base_rate": 0.46989455562728644,
+  "model": {
+    "ROC AUC": 0.7000538962028944,
+    "Average precision": 0.635577914446335,
+    "Precision@20": 0.8,
+    "Precision@50": 0.8,
+    "Precision@100": 0.73,
+    "Precision@500": 0.702
+  },
+  "baseline": {
+    "ROC AUC": 0.5704298696239564,
+    "Average precision": 0.4922180758167653,
+    "Precision@20": 0.55,
+    "Precision@50": 0.36,
+    "Precision@100": 0.35,
+    "Precision@500": 0.372
+  },
+  "per_client_macro_p50": {
+    "model": 0.4914285714285714,
+    "baseline": 0.23142857142857146,
+    "eligible_clients": 7
+  },
+  "feature_importance": {
+    "avg_position": 0.32266717028479563,
+    "impressions": 0.29173066559177735,
+    "active_days": 0.1902921419716838,
+    "ctr": 0.13155207108450231,
+    "clicks": 0.06375795106724097
+  },
+  "seed": 42,
+  "note": "Predictive, observational; no causal refresh-effect claim."
+}

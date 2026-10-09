@@ -21,11 +21,11 @@ The deliberately transparent baseline sorts pages by **descending `log(1 + March
 
 | Held-out metric | Visibility baseline | Random forest |
 |---|---:|---:|
-| Precision@20 | 55.0% | 75.0% |
+| Precision@20 | 55.0% | 80.0% |
 | Precision@50 | 36.0% | 80.0% |
-| Precision@100 | 35.0% | 72.0% |
+| Precision@100 | 35.0% | 73.0% |
 | Precision@500 | 37.2% | 70.2% |
-| ROC AUC | 0.570 | 0.701 |
+| ROC AUC | 0.570 | 0.700 |
 | Average precision | 0.492 | 0.636 |
 
 This baseline is **not** the earlier Week 4 refresh-score benchmark, which used a different dataset and target; those historical numbers should not be presented as directly comparable.
@@ -40,9 +40,9 @@ A **RandomForestClassifier** assigns a probability-like ranking score to each Ma
 
 A single `GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=42)` separates complete clients: **34 training clients, 135,314 pages** and **12 test clients, 23,235 pages**, with no client overlap. This controls client-level overlap, although it is **not** an out-of-time replication; features refer to March and outcomes to April for both groups.
 
-The **overall observed positive-label rate is 47.8%**, and the **held-out rate is 47.0%**. For context, the held-out majority-class rate is about **53.0%** (not a ranking baseline). The model's Precision@50 is **80.0%**, compared with **36.0%** for the baseline and **47.0%** held-out prevalence: a roughly **1.70× precision lift over prevalence**, with a **44-percentage-point** improvement over the tested baseline. ROC AUC improves from **0.570 to 0.701**, which provides discrimination evidence beyond top-k alone.
+The **overall observed positive-label rate is 47.8%**, and the **held-out rate is 47.0%**. For context, the held-out majority-class rate is about **53.0%** (not a ranking baseline). The model's Precision@50 is **80.0%**, compared with **36.0%** for the baseline and **47.0%** held-out prevalence: a roughly **1.70× precision lift over prevalence**, with a **44-percentage-point** improvement over the tested baseline. ROC AUC improves from **0.570 to 0.700**, which provides discrimination evidence beyond top-k alone.
 
-**Error analysis and operational caution:** At K=50, **10 of the 50** top-ranked model pages did **not** satisfy the measured decline label (false positive reviews under this proxy); the baseline had **32 such pages**. Precision@50 alone does not identify all future declines or quantify the model's total false negatives, so recall should not be inferred from that figure. Global top-k ranks may favor large clients. Among the **7 held-out clients with at least 50 eligible pages**, macro-averaged per-client Precision@50 is **50.3% for the model versus 23.1% for the baseline**. This spread between global and per-client metrics warns against assuming equal client benefit. No uncertainty intervals, threshold-level confusion matrix, or additional client/time splits were measured here.
+**Error analysis and operational caution:** At K=50, **10 of the 50** top-ranked model pages did **not** satisfy the measured decline label (false positive reviews under this proxy); the baseline had **32 such pages**. Precision@50 alone does not identify all future declines or quantify the model's total false negatives, so recall should not be inferred from that figure. Global top-k ranks may favor large clients. Among the **7 held-out clients with at least 50 eligible pages**, macro-averaged per-client Precision@50 is **49.1% for the model versus 23.1% for the baseline**. This spread between global and per-client metrics warns against assuming equal client benefit. No uncertainty intervals, threshold-level confusion matrix, or additional client/time splits were measured here.
 
 ## 6. Interpretation
 
@@ -50,13 +50,13 @@ The model provides better retrospective prioritization than the tested visibilit
 
 | Feature | Importance |
 |---|---:|
-| `avg_position` | 0.324 |
-| `impressions` | 0.291 |
+| `avg_position` | 0.323 |
+| `impressions` | 0.292 |
 | `active_days` | 0.190 |
-| `ctr` | 0.131 |
+| `ctr` | 0.132 |
 | `clicks` | 0.064 |
 
-This suggests reported search position and exposure are useful **within this fitted model**, but impurity importance is not a causal explanation. Correlated features and client differences can affect those rankings. A noteworthy limitation is that strong **global** Precision@50 (80.0%) coexists with materially lower **macro per-client** Precision@50 (50.3%); the aggregate metric is not a guarantee of uniform results. No negative causal effect, refresh uplift, or time-series stability was tested.
+This suggests reported search position and exposure are useful **within this fitted model**, but impurity importance is not a causal explanation. Correlated features and client differences can affect those rankings. A noteworthy limitation is that strong **global** Precision@50 (80.0%) coexists with materially lower **macro per-client** Precision@50 (49.1%); the aggregate metric is not a guarantee of uniform results. No negative causal effect, refresh uplift, or time-series stability was tested.
 
 ## 7. Recommendation
 
@@ -72,7 +72,7 @@ From a fresh clone of the repository, using **Python 3.10+** and a private, auth
 git clone https://github.com/dardourmehdi/FlyrankAI-ML.git
 cd FlyrankAI-ML
 python -m venv .venv
-source .venv/bin/activate 
+source .venv/bin/activate  # macOS/Linux
 python -m pip install numpy pandas scikit-learn
 python run_capstone.py --csv /ABSOLUTE/PRIVATE/PATH/flyrank_march_april_model_data.csv --out outputs
 ```
